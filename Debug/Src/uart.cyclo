@@ -1,0 +1,3 @@
+../Src/uart.c:3:6:send_message	2
+../Src/uart.c:12:6:read_message	2
+../Src/uart.c:26:6:LPUART1_initialization	1

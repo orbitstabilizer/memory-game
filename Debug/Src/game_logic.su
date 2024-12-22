@@ -1,0 +1,5 @@
+../Src/game_logic.c:8:6:reset_game	8	static
+../Src/game_logic.c:17:6:is_current_move_correct	16	static
+../Src/game_logic.c:25:6:switch_turn	8	static
+../Src/game_logic.c:40:6:handle_player_turn	24	static
+../Src/game_logic.c:70:6:handle_opponents_turn	16	static
