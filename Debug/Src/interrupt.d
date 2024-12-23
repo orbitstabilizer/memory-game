@@ -1,12 +1,13 @@
-Src/interrupt.o: ../Src/interrupt.c ../Src/interrupt.h ../Src/addresses.h \
- ../Src/gpio.h ../Src/move.h ../Src/uart.h ../Src/game_logic.h \
- ../Src/time.h ../Src/adc.h ../Src/icoc.h
-../Src/interrupt.h:
-../Src/addresses.h:
-../Src/gpio.h:
-../Src/move.h:
-../Src/uart.h:
-../Src/game_logic.h:
-../Src/time.h:
-../Src/adc.h:
-../Src/icoc.h:
+Src/interrupt.o: ../Src/interrupt.c ../Inc/interrupt.h ../Inc/addresses.h \
+ ../Inc/gpio.h ../Inc/move.h ../Inc/uart.h ../Inc/game_logic.h \
+ ../Inc/time.h ../Inc/interrupt.h ../Inc/adc.h ../Inc/icoc.h
+../Inc/interrupt.h:
+../Inc/addresses.h:
+../Inc/gpio.h:
+../Inc/move.h:
+../Inc/uart.h:
+../Inc/game_logic.h:
+../Inc/time.h:
+../Inc/interrupt.h:
+../Inc/adc.h:
+../Inc/icoc.h:

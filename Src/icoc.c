@@ -12,32 +12,6 @@
 
 
 /*
- * Setup pins PE7-13 to output
- */
-void setup_7_segment(){
-	/*
-	 * COMPLETE FUNTIONALITY OF DISPLAY MATRIX WAS IMPLEMENTED IN GPIO/TIMER PI
-	 */
-	RCC_AHB2ENR |= (1<<('E'-'A')); // enable Port E clock
-	// PE7-13 to output
-	__BFI(GPIOE->MODER, 0x5555, 7*2, 2*7)
-}
-
-/*
- * Writes 7 segment mask to  PE7-13 to output
- *
- */
-void write_to_7s(uint8_t number){
-	if (number > 10)number = 10;
-	static const uint8_t masks[11] ={
-		0x3FU,0x06U,0x5BU,0x4FU,0x66U,0x6DU,0x7DU,0x07U,0x7FU,0x6FU, 0xFFU
-	};
-	// offset is 7
-	__BFI(GPIOE->ODR,masks[number], 7, 7 )
-}
-
-
-/*
  * Setup PA6 for IC using TIM16
  */
 void setup_IC(){

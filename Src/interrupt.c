@@ -6,6 +6,8 @@ int button_pressed = -1;
 void LPUART1_IRQHandler(void) {
     if ((LPUART1->ISR & (1 << 5)) != 0) {
     	// Read the arrived value.
+
+
         MOVE move = read_message();
 
 		// Check if the move is valid.
@@ -43,20 +45,24 @@ void TIM16_IRQHandler() {
 			TIM16->CNT=0; // reset timer counter
 			ic.increment=1; // set increment so that the time context variable keeps pulse duration
 			ic.time=0; // reset time context
+			display.timer = ic.time;
 			ADC_1->CR |= (1 << 2); //Start regular conversion of ADC
 			ic_on_progress = 1;
+
 		}
 		else{
 			/*
 			 * PUBLISH NOTE TIME WITH UART
 			 */
 			if (current_turn != OPPONENT) {
+				handle_player_turn((MOVE){0, ic.time%5, false});
 				if (button_pressed != -1) {
 					handle_player_turn((MOVE){0, ic.time%5, false});
 					button_pressed = -1;
 				}
 				play_tune(ic.time%7, 100);
 			}
+//			play_tune(ic.time%7, 100);
 			ic_on_progress = 0;
 			ic.increment=0;
 		}
@@ -65,12 +71,13 @@ void TIM16_IRQHandler() {
 	// On timer update event increment context time
 	if ((TIM16->SR & 1) != 0){
 		ic.time+=ic.increment; // increment time only if measuing the pulse
+
 		if (ic.time > 9) ic.time = 0;
 		TIM16->SR &= ~1;
 	}
 
 	// display current time
-	// write_to_7s(self.time);
+	display.timer = ic.time;
 
 }
 

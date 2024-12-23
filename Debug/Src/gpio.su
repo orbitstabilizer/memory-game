@@ -1,10 +1,2 @@
-../Src/gpio.c:25:6:enable_gpio_data	24	static
-../Src/gpio.c:30:6:write_gpio_data	24	static
-../Src/gpio.c:35:5:read_gpio_data	24	static
-../Src/gpio.c:40:5:read_button	16	static
-../Src/gpio.c:44:6:seven_segment_display	80	static
-../Src/gpio.c:69:6:turn_on_LED_RED	8	static
-../Src/gpio.c:75:6:turn_on_LED_BLUE	8	static
-../Src/gpio.c:81:6:turn_on_LED_GREEN	8	static
-../Src/gpio.c:87:6:turn_off_LEDs	8	static
-../Src/gpio.c:94:6:GPIO_initialization	24	static
+../Src/gpio.c:25:6:setup_gpio	4	static
+../Src/gpio.c:50:6:TIM7_IRQHandler	16	static

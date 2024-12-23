@@ -1,6 +1,4 @@
-../Src/icoc.c:17:6:setup_7_segment	16	static,ignoring_inline_asm
-../Src/icoc.c:30:6:write_to_7s	24	static,ignoring_inline_asm
-../Src/icoc.c:43:6:setup_IC	24	static,ignoring_inline_asm
-../Src/icoc.c:89:6:setup_OC	24	static,ignoring_inline_asm
-../Src/icoc.c:130:6:TIM17_IRQHandler	4	static
-../Src/icoc.c:144:6:play_tune	24	static
+../Src/icoc.c:17:6:setup_IC	24	static,ignoring_inline_asm
+../Src/icoc.c:63:6:setup_OC	24	static,ignoring_inline_asm
+../Src/icoc.c:104:6:TIM17_IRQHandler	4	static
+../Src/icoc.c:118:6:play_tune	24	static

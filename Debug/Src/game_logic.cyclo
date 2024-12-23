@@ -1,5 +1,5 @@
-../Src/game_logic.c:8:6:reset_game	1
-../Src/game_logic.c:17:6:is_current_move_correct	2
-../Src/game_logic.c:25:6:switch_turn	2
-../Src/game_logic.c:40:6:handle_player_turn	4
-../Src/game_logic.c:70:6:handle_opponents_turn	4
+../Src/game_logic.c:9:6:reset_game	1
+../Src/game_logic.c:20:6:is_current_move_correct	2
+../Src/game_logic.c:28:6:switch_turn	2
+../Src/game_logic.c:45:6:handle_player_turn	4
+../Src/game_logic.c:75:6:handle_opponents_turn	4

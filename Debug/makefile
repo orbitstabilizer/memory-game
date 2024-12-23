@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := ICOC-PI-SUBMITTION
+BUILD_ARTIFACT_NAME := MemoryGame
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-ICOC-PI-SUBMITTION.elf \
+MemoryGame.elf \
 
 MAP_FILES += \
-ICOC-PI-SUBMITTION.map \
+MemoryGame.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-ICOC-PI-SUBMITTION.list \
+MemoryGame.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: ICOC-PI-SUBMITTION.elf secondary-outputs
+main-build: MemoryGame.elf secondary-outputs
 
 # Tool invocations
-ICOC-PI-SUBMITTION.elf ICOC-PI-SUBMITTION.map: $(OBJS) $(USER_OBJS) D:\boun-cmpe\cmpe443\ICOC-PI-SUBMITTION\STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ICOC-PI-SUBMITTION.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"D:\boun-cmpe\cmpe443\ICOC-PI-SUBMITTION\STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="ICOC-PI-SUBMITTION.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+MemoryGame.elf MemoryGame.map: $(OBJS) $(USER_OBJS) /Users/yusufakin/STM32CubeIDE/workspace_1.15.1/MemoryGame/STM32L552ZETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MemoryGame.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/Users/yusufakin/STM32CubeIDE/workspace_1.15.1/MemoryGame/STM32L552ZETXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="MemoryGame.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-ICOC-PI-SUBMITTION.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "ICOC-PI-SUBMITTION.list"
+MemoryGame.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "MemoryGame.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) ICOC-PI-SUBMITTION.elf ICOC-PI-SUBMITTION.list ICOC-PI-SUBMITTION.map default.size.stdout
+	-$(RM) MemoryGame.elf MemoryGame.list MemoryGame.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
