@@ -24,7 +24,7 @@ Display display = {0};
 
 
 void setup_gpio(){
-	RCC_AHB2ENR |= (0b110011);
+	RCC_AHB2ENR |= (0b111011);
 	GPIOA->MODER &= ~(0b101010); // button indicator RGB
 	GPIOA->MODER |= (0b101010); // button indicator RGB
 	GPIOB->MODER &= ~(0b1010 << (2 * 10)); // 7 segment control
@@ -33,9 +33,9 @@ void setup_gpio(){
 	GPIOE->MODER |= (0b01010101010101 << (2 * 7)); // 7 segment data
 	GPIOE->MODER &= ~(0b10 << (2 * 15)); // 7 segment control
 	GPIOE->MODER |= (0b01 << (2 * 15)); // 7 segment control
-	GPIOF->MODER &= ~(0b101010 << (2 * 13)); // turn indicator
-	GPIOF->MODER |= (0b010101 << (2 * 13)); // turn indicator
-	GPIOF->ODR |= (0b111 << 13);
+	GPIOD->MODER &= ~(0b101010 << (2 * 5)); // turn indicator
+	GPIOD->MODER |= (0b010101 << (2 * 5)); // turn indicator
+	GPIOD->ODR |= (0b111 << 13);
 	GPIOA->ODR |= (0b111);
 
 	RCC_APB1ENR1 |= 1 << 5;
@@ -77,19 +77,19 @@ void TIM7_IRQHandler(void)
 	if(display.turn_indicator != previous_turn_indicator){
 		previous_turn_indicator = display.turn_indicator;
 		if(display.turn_indicator == 0){
-			GPIOF->ODR |= (0b1 << 13);
-			GPIOF->ODR |= (0b1 << 14);
-			GPIOF->ODR &= ~(0b1 << 15);
+			GPIOD->ODR |= (0b1 << 5);
+			GPIOD->ODR |= (0b1 << 6);
+			GPIOD->ODR &= ~(0b1 << 7);
 		}
 		else if(display.turn_indicator == 1){
-			GPIOF->ODR &= ~(0b1 << 13);
-			GPIOF->ODR |= (0b1 << 14);
-			GPIOF->ODR |= (0b1 << 15);
+			GPIOD->ODR &= ~(0b1 << 5);
+			GPIOD->ODR |= (0b1 << 6);
+			GPIOD->ODR |= (0b1 << 7);
 		}
 		else {
-			GPIOF->ODR |= (0b1 << 13);
-			GPIOF->ODR &= ~(0b1 << 14);
-			GPIOF->ODR |= (0b1 << 15);
+			GPIOD->ODR |= (0b1 << 5);
+			GPIOD->ODR &= ~(0b1 << 6);
+			GPIOD->ODR |= (0b1 << 7);
 		}
 	}
 
