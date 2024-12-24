@@ -74,12 +74,12 @@ void TIM7_IRQHandler(void)
 	GPIOE->ODR |= (0b1111111 << 7);
 	GPIOE->ODR &= ~(display_values[number] << 7);
 
-	if(current_turn == PLAYER){
+	if(display.turn_indicator == 0){
 		GPIOF->ODR |= (0b1 << 13);
 		GPIOF->ODR |= (0b1 << 14);
 		GPIOF->ODR &= ~(0b1 << 15);
 	}
-	else if(current_turn == OPPONENT){
+	else if(display.turn_indicator == 1){
 		GPIOF->ODR &= ~(0b1 << 13);
 		GPIOF->ODR |= (0b1 << 14);
 		GPIOF->ODR |= (0b1 << 15);

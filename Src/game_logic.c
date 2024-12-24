@@ -8,6 +8,7 @@ int turn_counter = 0; // the number of turns
 
 void reset_game() {
 	current_turn = UNDEFINED;
+	display.turn_indicator = 2;
 	current_memory_index = 0;
 	turn_counter = 0;
 //	seven_segment_display(0);
@@ -28,12 +29,14 @@ bool is_current_move_correct(MOVE move) {
 void switch_turn() {
 	if (current_turn == PLAYER) {
 		current_turn = OPPONENT; // Opponent's turn
+		display.turn_indicator = 1;
 //		turn_off_LEDs(); // Turn off turn indicator LED // TODO: display
 
 //		TIM6->CR1 &= ~(1 << 0); // Disable timer.
 	}
 	else {
 		current_turn = PLAYER; // Player's turn
+		display.turn_indicator = 0;
 //		turn_on_LED_BLUE(); // Turn on turn indicator LED //  TODO: display
 //		TIM6->CR1 |= 1; // Enable timer.
 	}
@@ -53,6 +56,7 @@ void handle_player_turn(MOVE move) {
     // If the first is from the player, then it is the player's turn
     if (current_turn == UNDEFINED) {
         current_turn = PLAYER;
+		display.turn_indicator = 0;
 //		turn_on_LED_BLUE(); // Turn on turn indicator LED  // TODO: display
     }
 
@@ -84,6 +88,7 @@ void handle_opponents_turn(MOVE move) {
     // If the first is from the opponent, then it is the opponent's turn
     if (current_turn == UNDEFINED) {
         current_turn = OPPONENT;
+		display.turn_indicator = 1;
 //        TIM6->CR1 &= ~(1 << 0); // Disable timer.
     }
 
