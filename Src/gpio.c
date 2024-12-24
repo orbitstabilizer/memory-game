@@ -35,7 +35,7 @@ void setup_gpio(){
 	GPIOE->MODER |= (0b01 << (2 * 15)); // 7 segment control
 	GPIOD->MODER &= ~(0b101010 << (2 * 5)); // turn indicator
 	GPIOD->MODER |= (0b010101 << (2 * 5)); // turn indicator
-	GPIOD->ODR |= (0b111 << 13);
+	GPIOD->ODR |= (0b111 << 5);
 	GPIOA->ODR |= (0b111);
 
 	RCC_APB1ENR1 |= 1 << 5;
