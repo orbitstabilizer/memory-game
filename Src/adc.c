@@ -32,7 +32,7 @@ void setup_adc() {
 int get_button(uint32_t voltage) {
 
     if(voltage<2300){
-        return -1;
+        return 0;
     }
     else if(voltage<2600){
         return 0;

@@ -29,5 +29,4 @@ void handle_player_turn(MOVE move);
 void handle_opponents_turn(MOVE move);
 
 
-
 #endif
