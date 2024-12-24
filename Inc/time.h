@@ -7,6 +7,7 @@
 
 #ifndef TIME_H_
 #define TIME_H_
+#include <stdint.h>
 
 typedef struct{
     volatile uint32_t CR1;
