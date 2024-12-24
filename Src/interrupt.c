@@ -106,7 +106,7 @@ void ADC1_2_IRQHandler() {
 }
 
 
-void EXTI6_IRQHandler(void){
+void EXTI5_IRQHandler(void){
 
     //SYSTEM RESET
     AIRCR |= 1<<2;

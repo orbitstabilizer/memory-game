@@ -65,6 +65,10 @@ typedef struct{
 #define ICER2 *((volatile uint32_t *) 0XE000E188)
 #define ISER1 *((volatile uint32_t*) 0xE000E104)
 #define ICER1 *((volatile uint32_t *) 0XE000E184)
+#define ISER0 *((volatile uint32_t*) 0xE000E100)
+#define ICER0 *((volatile uint32_t *) 0XE000E180)
+
+#define AIRCR *((volatile uint32_t *) 0XE000ED0C)
 
 #define PWR_CR1 *((volatile uint32_t *) 0x40007000)
 #define PWR_CR2 *((volatile uint32_t *) 0x40007004)

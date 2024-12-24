@@ -8,10 +8,12 @@
 #include "game_logic.h"
 #include "adc.h"
 #include "icoc.h"
+#include "exti.h"
 
 void LPUART1_IRQHandler(void);
 void TIM16_IRQHandler();
 void ADC1_2_IRQHandler();
+void EXTI5_IRQHandler();
 void __enable_irq(void);
 
 
