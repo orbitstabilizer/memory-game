@@ -61,12 +61,12 @@ void TIM16_IRQHandler() {
 			while(button_pressed == -1);
 
 			if (current_turn != OPPONENT) {
-				handle_player_turn((MOVE){button_pressed, ic.time%5, false});
+				handle_player_turn((MOVE){button_pressed, ic.time%3, false});
 //				if (button_pressed != -1) {
 //					handle_player_turn((MOVE){0, ic.time%5, false});
 //					button_pressed = -1;
 //				}
-				play_tune(ic.time%7, 100);
+				play_tune(button_pressed, 100 * ( (ic.time%3) +1));
 			}
 //			play_tune(ic.time%7, 100);
 			ic_on_progress = 0;
@@ -78,7 +78,7 @@ void TIM16_IRQHandler() {
 	if ((TIM16->SR & 1) != 0){
 		ic.time+=ic.increment; // increment time only if measuing the pulse
 
-		if (ic.time > 9) ic.time = 0;
+		if (ic.time > 3) ic.time = 0;
 		TIM16->SR &= ~1;
 	}
 

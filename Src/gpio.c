@@ -22,7 +22,7 @@ uint32_t display_values[10] = {
 
 
 Display display = {0};
-TURN current_turn;
+
 
 void setup_gpio(){
 	RCC_AHB2ENR |= (0b110011);
@@ -46,6 +46,7 @@ void setup_gpio(){
 	TIM7->DIER |= 1;
 	ISER1 |= 1 << 18;
 	TIM7->CR1 |= 1;
+
 }
 
 
