@@ -4,6 +4,7 @@
 #include "gpio.h"
 #include "addresses.h"
 #include "time.h"
+#include "game_logic.h"
 
 uint32_t display_values[10] = {
 	   // ecfdgab
@@ -22,18 +23,19 @@ uint32_t display_values[10] = {
 
 Display display = {0};
 
+
 void setup_gpio(){
 	RCC_AHB2ENR |= (0b110011);
-	GPIOA->MODER &= ~(0b101010);
-	GPIOA->MODER |= (0b101010);
-	GPIOB->MODER &= ~(0b1010 << (2 * 10));
-	GPIOB->MODER |= (0b0101 << (2 * 10));
-	GPIOE->MODER &= ~(0b10101010101010 << (2 * 7));
-	GPIOE->MODER |= (0b01010101010101 << (2 * 7));
-	GPIOE->MODER &= ~(0b10 << (2 * 15));
-	GPIOE->MODER |= (0b01 << (2 * 15));
-	GPIOF->MODER &= ~(0b101010 << (2 * 13));
-	GPIOF->MODER |= (0b010101 << (2 * 13));
+	GPIOA->MODER &= ~(0b101010); // button indicator RGB
+	GPIOA->MODER |= (0b101010); // button indicator RGB
+	GPIOB->MODER &= ~(0b1010 << (2 * 10)); // 7 segment control
+	GPIOB->MODER |= (0b0101 << (2 * 10)); // 7 segment control
+	GPIOE->MODER &= ~(0b10101010101010 << (2 * 7)); // 7 segment data
+	GPIOE->MODER |= (0b01010101010101 << (2 * 7)); // 7 segment data
+	GPIOE->MODER &= ~(0b10 << (2 * 15)); // 7 segment control
+	GPIOE->MODER |= (0b01 << (2 * 15)); // 7 segment control
+	GPIOF->MODER &= ~(0b101010 << (2 * 13)); // turn indicator
+	GPIOF->MODER |= (0b010101 << (2 * 13)); // turn indicator
 	GPIOF->ODR |= (0b111 << 13);
 	GPIOA->ODR |= (0b111);
 
@@ -49,7 +51,6 @@ void setup_gpio(){
 
 void TIM7_IRQHandler(void)
 {
-	static uint8_t previous_turn_indicator = 3;
 	static uint8_t previous_button_indicator = 8;
 	TIM7->SR=0;
 	GPIOE->ODR |= (1 << 15);
@@ -73,32 +74,20 @@ void TIM7_IRQHandler(void)
 	GPIOE->ODR |= (0b1111111 << 7);
 	GPIOE->ODR &= ~(display_values[number] << 7);
 
-	if(display.turn_indicator != previous_turn_indicator){
-		//put green
-		if(display.turn_indicator%2){
-			GPIOE->ODR &= ~(0b1 << 15);
-			GPIOF->ODR |= (0b1 << 13);
-		}
-		else {
-		//put red
-			GPIOE->ODR |= (0b1 << 15);
-			GPIOF->ODR &= ~(0b1 << 13);
-		}
-		previous_turn_indicator = display.turn_indicator;
-		GPIOF->ODR |= (0b111 << 13);
-		switch(display.turn_indicator){
-			case 0:
-				GPIOF->ODR &= ~(0b001 << 13);
-				break;
-			case 1:
-				GPIOF->ODR &= ~(0b100 << 13);
-				break;
-			case 2:
-				GPIOF->ODR &= ~(0b010 << 13);
-				break;
-			default:
-				break;
-		}
+	if(current_turn == PLAYER){
+		GPIOF->ODR |= (0b1 << 13);
+		GPIOF->ODR |= (0b1 << 14);
+		GPIOF->ODR &= ~(0b1 << 15);
+	}
+	else if(current_turn == OPPONENT){
+		GPIOF->ODR &= ~(0b1 << 13);
+		GPIOF->ODR |= (0b1 << 14);
+		GPIOF->ODR |= (0b1 << 15);
+	}
+	else {
+		GPIOF->ODR |= (0b1 << 13);
+		GPIOF->ODR &= ~(0b1 << 14);
+		GPIOF->ODR |= (0b1 << 15);
 	}
 	if(display.button_indicator != previous_button_indicator){
 		previous_button_indicator = display.button_indicator;
