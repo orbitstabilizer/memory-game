@@ -50,6 +50,7 @@ void setup_gpio(){
 
 void TIM7_IRQHandler(void)
 {
+	static uint8_t previous_turn_indicator = 3;
 	static uint8_t previous_button_indicator = 8;
 	TIM7->SR=0;
 	GPIOE->ODR |= (1 << 15);
@@ -73,21 +74,25 @@ void TIM7_IRQHandler(void)
 	GPIOE->ODR |= (0b1111111 << 7);
 	GPIOE->ODR &= ~(display_values[number] << 7);
 
-	if(display.turn_indicator == 0){
-		GPIOF->ODR |= (0b1 << 13);
-		GPIOF->ODR |= (0b1 << 14);
-		GPIOF->ODR &= ~(0b1 << 15);
+	if(display.turn_indicator != previous_turn_indicator){
+		previous_turn_indicator = display.turn_indicator;
+		if(display.turn_indicator == 0){
+			GPIOF->ODR |= (0b1 << 13);
+			GPIOF->ODR |= (0b1 << 14);
+			GPIOF->ODR &= ~(0b1 << 15);
+		}
+		else if(display.turn_indicator == 1){
+			GPIOF->ODR &= ~(0b1 << 13);
+			GPIOF->ODR |= (0b1 << 14);
+			GPIOF->ODR |= (0b1 << 15);
+		}
+		else {
+			GPIOF->ODR |= (0b1 << 13);
+			GPIOF->ODR &= ~(0b1 << 14);
+			GPIOF->ODR |= (0b1 << 15);
+		}
 	}
-	else if(display.turn_indicator == 1){
-		GPIOF->ODR &= ~(0b1 << 13);
-		GPIOF->ODR |= (0b1 << 14);
-		GPIOF->ODR |= (0b1 << 15);
-	}
-	else {
-		GPIOF->ODR |= (0b1 << 13);
-		GPIOF->ODR &= ~(0b1 << 14);
-		GPIOF->ODR |= (0b1 << 15);
-	}
+
 	if(display.button_indicator != previous_button_indicator){
 		previous_button_indicator = display.button_indicator;
 		GPIOA->ODR |= (0b111);
