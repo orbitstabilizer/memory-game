@@ -93,6 +93,7 @@ void ADC1_2_IRQHandler() {
 
 		uint32_t voltage = ADC_1->DR;
 		button_pressed = get_button(voltage);
+		display.button_indicator = button_pressed + 1;
 
 //		if (button_pressed != -1 && ic_on_progress == 0) {
 			// handle_player_turn((MOVE){0, ic.time%5, false});
