@@ -29,8 +29,15 @@ struct _ICContext{
 	uint32_t time;// in seconds
 	char     increment; // 0 or 1 : used for pulse width measurement
 	char     is_rising_edge; // indicates edge direction
+	int32_t cool_down;
+
 };
-struct _ICContext ic = {0};
+struct _ICContext ic = {
+		.time = 0,
+		.increment = 0,
+		.is_rising_edge =0,
+		.cool_down = 0
+};
 
 void TIM16_IRQHandler() {
 	// init internal context
@@ -58,9 +65,10 @@ void TIM16_IRQHandler() {
 			/*
 			 * PUBLISH NOTE TIME WITH UART
 			 */
-			while(button_pressed == -1);
+			// while(button_pressed == -1);
 
-			if (current_turn != OPPONENT) {
+			if (current_turn != OPPONENT && ic.cool_down <= 0) {
+				ic.cool_down = 1;
 				handle_player_turn((MOVE){button_pressed, ic.time%3, false});
 //				if (button_pressed != -1) {
 //					handle_player_turn((MOVE){0, ic.time%5, false});
@@ -78,7 +86,12 @@ void TIM16_IRQHandler() {
 	if ((TIM16->SR & 1) != 0){
 		ic.time+=ic.increment; // increment time only if measuing the pulse
 
-		if (ic.time > 9) ic.time = 0;
+		ic.cool_down -= 1;
+		if (ic.cool_down < 0) {
+			ic.cool_down = 0;
+		}
+
+		if (ic.time > 3) ic.time = 0;
 		TIM16->SR &= ~1;
 	}
 
@@ -89,7 +102,7 @@ void TIM16_IRQHandler() {
 
 void ADC1_2_IRQHandler() {
 
-	if ((ADC_1->ISR & 1 << 2) != 0) { //Check EOC
+	if ((ADC_1->ISR & (1 << 2)) != 0) { //Check EOC
 
 		uint32_t voltage = ADC_1->DR;
 		button_pressed = get_button(voltage);
