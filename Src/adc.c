@@ -29,34 +29,31 @@ void setup_adc() {
 	ISER1 |= (1 << 5); //enable global signaling for ADC_1_2 interrupt
 }
 
-int get_button(uint16_t voltage) {
+int get_button(uint32_t voltage) {
 
-    if(voltage<15){
+    if(voltage<2300){
         return -1;
     }
-    else if(voltage<20){
+    else if(voltage<2600){
         return 0;
     }
-    else if(voltage<25){
+    else if(voltage<2710){
         return 1;
     }
-    else if(voltage<30){
+    else if(voltage<3000){
         return 2;
     }
-    else if(voltage<35){ 
+    else if(voltage<3250){
         return 3;
     }
-    else if(voltage<40){
+    else if(voltage<3600){
         return 4;
     }
-    else if(voltage<45){
+    else if(voltage<3950){
         return 5;
     }
-    else if(voltage<50){
+    else {
         return 6;
-    }
-    else{
-        return -1;
     }
     
 }

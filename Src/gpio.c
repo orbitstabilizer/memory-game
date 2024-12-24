@@ -74,6 +74,16 @@ void TIM7_IRQHandler(void)
 	GPIOE->ODR &= ~(display_values[number] << 7);
 
 	if(display.turn_indicator != previous_turn_indicator){
+		//put green
+		if(display.turn_indicator%2){
+			GPIOE->ODR &= ~(0b1 << 15);
+			GPIOF->ODR |= (0b1 << 13);
+		}
+		else {
+		//put red
+			GPIOE->ODR |= (0b1 << 15);
+			GPIOF->ODR &= ~(0b1 << 13);
+		}
 		previous_turn_indicator = display.turn_indicator;
 		GPIOF->ODR |= (0b111 << 13);
 		switch(display.turn_indicator){

@@ -11,7 +11,8 @@ void send_message(MOVE move) {
 
 MOVE read_message() {
     uint8_t value = LPUART1->RDR;
-    MOVE move;
+    MOVE move = {0};
+
     if (value == 'A' - 1) {
         move.fail = true;
     }

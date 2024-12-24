@@ -38,6 +38,6 @@ typedef struct {
 
 void ADC1_2_IRQHandler();
 void setup_adc();
-int get_button(uint16_t voltage);
+int get_button(uint32_t voltage);
 
 #endif

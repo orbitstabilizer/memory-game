@@ -13,7 +13,7 @@ void setup() {
 	setup_gpio();
 	setup_IC();
 	setup_OC();
-//	setup_adc();
+	setup_adc();
 	LPUART1_initialization();
 
 }

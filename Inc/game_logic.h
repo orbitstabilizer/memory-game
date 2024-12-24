@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <time.h>
 #include "gpio.h"
 #include "uart.h"
 #include "move.h"

@@ -42,24 +42,30 @@ void TIM16_IRQHandler() {
 			/*
 			 * USE ADC TO DETECT WHICH BUTTON IS PRESSED
 			 */
-			TIM16->CNT=0; // reset timer counter
-			ic.increment=1; // set increment so that the time context variable keeps pulse duration
-			ic.time=0; // reset time context
-			display.timer = ic.time;
-			ADC_1->CR |= (1 << 2); //Start regular conversion of ADC
-			ic_on_progress = 1;
+			if (current_turn != OPPONENT) {
+				TIM16->CNT=0; // reset timer counter
+				ic.increment=1; // set increment so that the time context variable keeps pulse duration
+				ic.time=0; // reset time context
+				display.timer = ic.time;
+				button_pressed = -1;
+				 ADC_1->CR |= (1 << 2); //Start regular conversion of ADC
+				ic_on_progress = 1;
+			}
+
 
 		}
 		else{
 			/*
 			 * PUBLISH NOTE TIME WITH UART
 			 */
+			while(button_pressed == -1);
+
 			if (current_turn != OPPONENT) {
-				handle_player_turn((MOVE){0, ic.time%5, false});
-				if (button_pressed != -1) {
-					handle_player_turn((MOVE){0, ic.time%5, false});
-					button_pressed = -1;
-				}
+				handle_player_turn((MOVE){button_pressed, ic.time%5, false});
+//				if (button_pressed != -1) {
+//					handle_player_turn((MOVE){0, ic.time%5, false});
+//					button_pressed = -1;
+//				}
 				play_tune(ic.time%7, 100);
 			}
 //			play_tune(ic.time%7, 100);
@@ -85,14 +91,13 @@ void ADC1_2_IRQHandler() {
 
 	if ((ADC_1->ISR & 1 << 2) != 0) { //Check EOC
 
-		uint32_t temp = ADC_1->DR;
-		uint8_t result = temp * 33 / 4095;
-		uint16_t voltage = result;
+		uint32_t voltage = ADC_1->DR;
 		button_pressed = get_button(voltage);
 
-		if (ic_on_progress == 0) {
-			handle_player_turn((MOVE){0, ic.time%5, false});
-		}
+//		if (button_pressed != -1 && ic_on_progress == 0) {
+			// handle_player_turn((MOVE){0, ic.time%5, false});
+			// button_pressed = -1;
+//		}
 
 	}
 

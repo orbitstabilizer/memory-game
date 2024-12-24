@@ -11,7 +11,7 @@ void reset_game() {
 	current_memory_index = 0;
 	turn_counter = 0;
 //	seven_segment_display(0);
-	display.turn_counter = 0; //TODO:display
+	display.turn_counter = 1; //TODO:display
 
 
 //    TIM6->CR1 |= 1; // Enable timer.
@@ -37,12 +37,19 @@ void switch_turn() {
 //		turn_on_LED_BLUE(); // Turn on turn indicator LED //  TODO: display
 //		TIM6->CR1 |= 1; // Enable timer.
 	}
-	display.turn_counter = (++turn_counter);
+	display.turn_counter = (++turn_counter) + 1;
 //	seven_segment_display(++turn_counter);
 	current_memory_index = 0;
 }
 
 void handle_player_turn(MOVE move) {
+	static int GAME_LOCK = 0;
+
+//	double time_taken
+//	if (clock() - GAME_LOCK < 1)
+//		return;
+//
+//	GAME_LOCK = clock();
     // If the first is from the player, then it is the player's turn
     if (current_turn == UNDEFINED) {
         current_turn = PLAYER;
@@ -61,11 +68,12 @@ void handle_player_turn(MOVE move) {
 		if (is_current_move_correct(move)) {
 			// Player has correctly pressed the button
 			current_memory_index++;
+			display.turn_counter--;
 		}
 		else {
 			// Player has pressed the wrong button
 			// Send the message to the opponent
-			send_message((MOVE){0, 0,true});
+			send_message((MOVE){0, 0, true});
 //			turn_on_LED_RED(); // Lose indicator LED  // TODO: display
 			reset_game();
 		}
