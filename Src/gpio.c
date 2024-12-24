@@ -4,7 +4,6 @@
 #include "gpio.h"
 #include "addresses.h"
 #include "time.h"
-#include "game_logic.h"
 
 uint32_t display_values[10] = {
 	   // ecfdgab
