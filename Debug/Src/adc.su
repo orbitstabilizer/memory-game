@@ -1,2 +1,0 @@
-../Src/adc.c:3:6:setup_adc	4	static
-../Src/adc.c:32:5:get_button	16	static

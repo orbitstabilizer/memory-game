@@ -1,4 +1,0 @@
-../Src/interrupt.c:6:6:LPUART1_IRQHandler	16	static
-../Src/interrupt.c:35:6:TIM16_IRQHandler	16	static
-../Src/interrupt.c:84:6:ADC1_2_IRQHandler	24	static
-../Src/interrupt.c:104:6:__enable_irq	4	static,ignoring_inline_asm

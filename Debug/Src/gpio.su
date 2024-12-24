@@ -1,2 +1,0 @@
-../Src/gpio.c:25:6:setup_gpio	4	static
-../Src/gpio.c:50:6:TIM7_IRQHandler	16	static

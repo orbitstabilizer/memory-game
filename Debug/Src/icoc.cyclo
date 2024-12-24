@@ -1,4 +1,0 @@
-../Src/icoc.c:17:6:setup_IC	1
-../Src/icoc.c:63:6:setup_OC	1
-../Src/icoc.c:104:6:TIM17_IRQHandler	3
-../Src/icoc.c:118:6:play_tune	1
