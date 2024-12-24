@@ -26,7 +26,7 @@ Display display = {0};
 void setup_gpio(){
 	RCC_AHB2ENR |= (0b111011);
 	GPIOA->MODER &= ~(0b101010); // button indicator RGB
-	GPIOA->MODER |= (0b101010); // button indicator RGB
+	GPIOA->MODER |= (0b010101); // button indicator RGB
 	GPIOB->MODER &= ~(0b1010 << (2 * 10)); // 7 segment control
 	GPIOB->MODER |= (0b0101 << (2 * 10)); // 7 segment control
 	GPIOE->MODER &= ~(0b10101010101010 << (2 * 7)); // 7 segment data
@@ -76,12 +76,12 @@ void TIM7_IRQHandler(void)
 
 	if(display.turn_indicator != previous_turn_indicator){
 		previous_turn_indicator = display.turn_indicator;
-		if(display.turn_indicator == 0){
+		if(display.turn_indicator == 1){
 			GPIOD->ODR |= (0b1 << 5);
 			GPIOD->ODR |= (0b1 << 6);
 			GPIOD->ODR &= ~(0b1 << 7);
 		}
-		else if(display.turn_indicator == 1){
+		else if(display.turn_indicator == 2){
 			GPIOD->ODR &= ~(0b1 << 5);
 			GPIOD->ODR |= (0b1 << 6);
 			GPIOD->ODR |= (0b1 << 7);
