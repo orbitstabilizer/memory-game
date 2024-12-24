@@ -9,6 +9,8 @@
 #define TIME_H_
 #include <stdint.h>
 
+#include <stdint.h>
+
 typedef struct{
     volatile uint32_t CR1;
     volatile uint32_t CR2;

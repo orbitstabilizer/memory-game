@@ -22,19 +22,20 @@ uint32_t display_values[10] = {
 
 Display display = {0};
 
+
 void setup_gpio(){
-	RCC_AHB2ENR |= (0b110011);
-	GPIOA->MODER &= ~(0b101010);
-	GPIOA->MODER |= (0b101010);
-	GPIOB->MODER &= ~(0b1010 << (2 * 10));
-	GPIOB->MODER |= (0b0101 << (2 * 10));
-	GPIOE->MODER &= ~(0b10101010101010 << (2 * 7));
-	GPIOE->MODER |= (0b01010101010101 << (2 * 7));
-	GPIOE->MODER &= ~(0b10 << (2 * 15));
-	GPIOE->MODER |= (0b01 << (2 * 15));
-	GPIOF->MODER &= ~(0b101010 << (2 * 13));
-	GPIOF->MODER |= (0b010101 << (2 * 13));
-	GPIOF->ODR |= (0b111 << 13);
+	RCC_AHB2ENR |= (0b111011);
+	GPIOA->MODER &= ~(0b101010); // button indicator RGB
+	GPIOA->MODER |= (0b010101); // button indicator RGB
+	GPIOB->MODER &= ~(0b1010 << (2 * 10)); // 7 segment control
+	GPIOB->MODER |= (0b0101 << (2 * 10)); // 7 segment control
+	GPIOE->MODER &= ~(0b10101010101010 << (2 * 7)); // 7 segment data
+	GPIOE->MODER |= (0b01010101010101 << (2 * 7)); // 7 segment data
+	GPIOE->MODER &= ~(0b10 << (2 * 15)); // 7 segment control
+	GPIOE->MODER |= (0b01 << (2 * 15)); // 7 segment control
+	GPIOD->MODER &= ~(0b101010 << (2 * 5)); // turn indicator
+	GPIOD->MODER |= (0b010101 << (2 * 5)); // turn indicator
+	GPIOD->ODR |= (0b111 << 5);
 	GPIOA->ODR |= (0b111);
 
 	RCC_APB1ENR1 |= 1 << 5;
@@ -74,32 +75,24 @@ void TIM7_IRQHandler(void)
 	GPIOE->ODR &= ~(display_values[number] << 7);
 
 	if(display.turn_indicator != previous_turn_indicator){
-		//put green
-		if(display.turn_indicator%2){
-			GPIOE->ODR &= ~(0b1 << 15);
-			GPIOF->ODR |= (0b1 << 13);
+		previous_turn_indicator = display.turn_indicator;
+		if(display.turn_indicator == 1){
+			GPIOD->ODR |= (0b1 << 5);
+			GPIOD->ODR |= (0b1 << 6);
+			GPIOD->ODR &= ~(0b1 << 7);
+		}
+		else if(display.turn_indicator == 2){
+			GPIOD->ODR &= ~(0b1 << 5);
+			GPIOD->ODR |= (0b1 << 6);
+			GPIOD->ODR |= (0b1 << 7);
 		}
 		else {
-		//put red
-			GPIOE->ODR |= (0b1 << 15);
-			GPIOF->ODR &= ~(0b1 << 13);
-		}
-		previous_turn_indicator = display.turn_indicator;
-		GPIOF->ODR |= (0b111 << 13);
-		switch(display.turn_indicator){
-			case 0:
-				GPIOF->ODR &= ~(0b001 << 13);
-				break;
-			case 1:
-				GPIOF->ODR &= ~(0b100 << 13);
-				break;
-			case 2:
-				GPIOF->ODR &= ~(0b010 << 13);
-				break;
-			default:
-				break;
+			GPIOD->ODR |= (0b1 << 5);
+			GPIOD->ODR &= ~(0b1 << 6);
+			GPIOD->ODR |= (0b1 << 7);
 		}
 	}
+
 	if(display.button_indicator != previous_button_indicator){
 		previous_button_indicator = display.button_indicator;
 		GPIOA->ODR |= (0b111);
