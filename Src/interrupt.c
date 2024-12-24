@@ -106,9 +106,22 @@ void ADC1_2_IRQHandler() {
 }
 
 
+void EXTI6_IRQHandler(void){
+
+    //SYSTEM RESET
+    AIRCR |= 1<<2;
+
+    EXTI->FPR1 |= (1<<5);
+
+
+
+}
+
+
 void __enable_irq(void) {
     __asm volatile(
         "mov r0, #0 \n\t"
         "msr primask, r0 \n\t"
     );
 }
+
