@@ -1,5 +1,6 @@
 #include "game_logic.h"
 #include "gpio.h"
+#include "icoc.h"
 
 TURN current_turn;
 MOVE memory[100];
@@ -30,29 +31,19 @@ void switch_turn() {
 	if (current_turn == PLAYER) {
 		current_turn = OPPONENT; // Opponent's turn
 		display.turn_indicator = 1;
-//		turn_off_LEDs(); // Turn off turn indicator LED // TODO: display
 
-//		TIM6->CR1 &= ~(1 << 0); // Disable timer.
 	}
 	else {
 		current_turn = PLAYER; // Player's turn
 		display.turn_indicator = 0;
-//		turn_on_LED_BLUE(); // Turn on turn indicator LED //  TODO: display
-//		TIM6->CR1 |= 1; // Enable timer.
+
 	}
 	display.turn_counter = (++turn_counter) + 1;
-//	seven_segment_display(++turn_counter);
 	current_memory_index = 0;
 }
 
 void handle_player_turn(MOVE move) {
-	static int GAME_LOCK = 0;
 
-//	double time_taken
-//	if (clock() - GAME_LOCK < 1)
-//		return;
-//
-//	GAME_LOCK = clock();
     // If the first is from the player, then it is the player's turn
     if (current_turn == UNDEFINED) {
         current_turn = PLAYER;

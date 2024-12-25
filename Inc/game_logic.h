@@ -28,6 +28,9 @@ void handle_player_turn(MOVE move);
 
 void handle_opponents_turn(MOVE move);
 
+extern MOVE memory[100];
+extern int turn_counter; // the number of turns
+
 
 
 #endif

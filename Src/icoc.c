@@ -7,15 +7,9 @@
 
 
 #include "icoc.h"
-#include "game_logic.h"
+#include "move.h"
 #include "addresses.h"
 
-void EXTI8_IRQHandler(){
-	if ( EXTI_RPR1 & ( 1 << 8) ){
-		EXTI_RPR1 |= (1 <<8);
-		reset_game();
-	}
-}
 
 /*
  * Setup PA6 for IC using TIM16
@@ -88,6 +82,7 @@ void setup_OC(){
 	// set output mode PWM1
 	__BFI(TIM17->CCMR1, 0b0110, 4, 4)
 
+
 	// default polarity is active high
 
 	// enable the timer
@@ -104,18 +99,46 @@ void setup_OC(){
  */
 typedef struct {
 	int note_duration;
+	int _is_melody;
+
+	MOVE * _moves;
+	uint32_t _melody_iter;
+	uint32_t _melody_len;
+	int _silence;
+
+
 }_TunePlayerContext;
 
-_TunePlayerContext _tune_player_context;
+_TunePlayerContext _tune_player = {0};
 void TIM17_IRQHandler() {
 	if ((TIM17->SR & (1 << 1)) != 0) { // if OC interrupt
 		TIM17->SR &= ~(1 << 1); // clear the interrupt flag
-		_tune_player_context.note_duration--; // down counting for tone duration
-		if (_tune_player_context.note_duration < 0){ // if target duration is reached
-			TIM17->CR1 &= ~1; // stop the timer clock ( play_tune starts it)
+		_tune_player.note_duration--; // down counting for tone duration
+		if (_tune_player.note_duration < 0){ // if target duration is reached
+			if (_tune_player._is_melody && _tune_player._melody_iter+1 <_tune_player._melody_len ){
+				if (!_tune_player._silence){
+					_tune_player._melody_iter+=1;
+					// set output mode PWM1
+					__BFI(TIM17->CCMR1, 0b0110, 4, 4)
+				}
+				else{
+					// set output mode Forced low
+					__BFI(TIM17->CCMR1, 0b0100, 4, 4)
+				}
+				_tune_player._silence^=1;
+				play_tune(
+                    _tune_player._moves[ _tune_player._melody_iter].button %7, 
+                    (_tune_player._moves[ _tune_player._melody_iter].time + 1) * 180
+                );
+
+			}
+			else{
+				TIM17->CR1 &= ~1; // stop the timer clock ( play_tune starts it)
+			}
 		}
 	}
 }
+
 
 
 /*
@@ -131,7 +154,7 @@ void play_tune(unsigned char note, uint16_t duration_ms){
 	int freq = tunes[note];
 
 	int prescaler = 4000000/freq /2; // pre-calculate pre-scaler as integer, for precision
-	_tune_player_context.note_duration =  (freq*duration_ms)/1000; // set tune duration
+	_tune_player.note_duration =  (freq*duration_ms)/1000; // set tune duration
 	TIM17->PSC = prescaler-1; // counter clock freq is set to note frequency
 
 	// %50 percent duty cycle
@@ -142,4 +165,15 @@ void play_tune(unsigned char note, uint16_t duration_ms){
 	TIM17->CR1 |= 1;
 
 }
+
+void play_melody_from_moves(MOVE* moves, uint32_t len){
+	_tune_player._melody_iter = 0;
+	_tune_player._moves = moves;
+	_tune_player._melody_len = len;
+	_tune_player._silence = 1;
+
+	_tune_player._is_melody = 1;
+	play_tune(moves->button %7, 80*( 1 + moves->time ));
+}
+
 

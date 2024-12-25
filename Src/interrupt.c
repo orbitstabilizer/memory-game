@@ -1,4 +1,6 @@
 #include "interrupt.h"
+#include "game_logic.h"
+#include "icoc.h"
 
 int ic_on_progress = 0;
 int button_pressed = -1;
@@ -19,6 +21,7 @@ void LPUART1_IRQHandler(void) {
 		}
 
 		handle_opponents_turn(move);
+		play_melody_from_moves(memory,turn_counter);
     }
 }
 
@@ -120,6 +123,12 @@ void ADC1_2_IRQHandler() {
 
 	return;
 
+}
+void EXTI8_IRQHandler(){
+	if ( EXTI_RPR1 & ( 1 << 8) ){
+		EXTI_RPR1 |= (1 <<8);
+		reset_game();
+	}
 }
 
 

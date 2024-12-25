@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include "gpio.h"
 #include "time.h"
+#include "move.h"
 
 
 /*
@@ -36,6 +37,7 @@ void setup_OC();
 void TIM17_IRQHandler(void);
 
 void play_tune(unsigned char note, uint16_t duration_ms);
+void play_melody_from_moves(MOVE* moves, uint32_t len);
 
 
 
