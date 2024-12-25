@@ -105,6 +105,9 @@ void handle_opponents_turn(MOVE move) {
 	}
 	// Opponent pressed button 0 or 1 at the end, add 0 or 1 to memory
 	memory[turn_counter] = move;
+	display.button_indicator = move.button + 1;
+	display.timer = move.time;
+
 	// now, it is the player's turn
 	switch_turn();
 }

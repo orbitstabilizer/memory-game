@@ -85,6 +85,26 @@ typedef struct{
 #define UART4 ((USARTType *) 0x40004C00)
 #define UART5 ((USARTType *) 0x40005000)
 
+
+#define ISER0             * ( (volatile uint32_t * )(0xE000E100 ) )
+
+
+#define GPIOA_MODER       * ( (volatile uint32_t * )(0x42020000 ) )
+#define GPIOA_ODR         * ( (volatile uint32_t * )(0x42020014 ) )
+
+#define GPIOC_MODER       * ( (volatile uint32_t * )(0x42020800 ) )
+#define GPIOC_IDR         * ( (volatile uint32_t * )(0x42020810 ) )
+
+#define EXTI_RTSR1        * ( (volatile uint32_t * )(0x4002F400 ) )
+#define EXTI_FTSR1        * ( (volatile uint32_t * )(0x4002F404 ) )
+#define EXTI_EXTICR4		  * ( (volatile uint32_t * )(0x4002F46C ) )
+#define EXTI_EXTICR3		  * ( (volatile uint32_t * )(0x4002F468 ) )
+
+#define EXTI_RPR1         * ( (volatile uint32_t * )(0x4002F40C ) )
+#define EXTI_FPR1         * ( (volatile uint32_t * )(0x4002F410 ) )
+
+#define EXTI_IMR1         * ( (volatile uint32_t * )(0x4002F480 ) )
+
 #define __WFI __asm volatile ("wfi")
 
 /*

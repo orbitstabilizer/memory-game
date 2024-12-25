@@ -74,7 +74,7 @@ void TIM16_IRQHandler() {
 //					handle_player_turn((MOVE){0, ic.time%5, false});
 //					button_pressed = -1;
 //				}
-				play_tune(button_pressed%7, 80*( 1+(ic.time%3) ));
+				play_tune(button_pressed%7, 80*( 1+(ic.time%4) ));
 			}
 //			play_tune(ic.time%7, 100);
 			ic_on_progress = 0;
@@ -91,12 +91,15 @@ void TIM16_IRQHandler() {
 			ic.cool_down = 0;
 		}
 
-		if (ic.time > 3) ic.time = 0;
+		if (ic.time > 2) ic.time = 0;
 		TIM16->SR &= ~1;
 	}
 
 	// display current time
-	display.timer = ic.time;
+	if (ic.is_rising_edge){
+		display.timer = ic.time;
+	}
+
 
 }
 

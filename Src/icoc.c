@@ -8,8 +8,14 @@
 
 #include "icoc.h"
 #include "game_logic.h"
+#include "addresses.h"
 
-
+void EXTI8_IRQHandler(){
+	if ( EXTI_RPR1 & ( 1 << 8) ){
+		EXTI_RPR1 |= (1 <<8);
+		reset_game();
+	}
+}
 
 /*
  * Setup PA6 for IC using TIM16
