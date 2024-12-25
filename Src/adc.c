@@ -31,10 +31,7 @@ void setup_adc() {
 
 int get_button(uint32_t voltage) {
 
-    if(voltage<2300){ //bune
-        return 0;
-    }
-    else if(voltage<2600){ //2.25  2.19
+    if(voltage<2550){ //2.25  2.19
         return 0;
     }
     else if(voltage<2710){ //2.43-44 2.37
