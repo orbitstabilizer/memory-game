@@ -36,7 +36,7 @@ void setup_IC();
 void setup_OC();
 void TIM17_IRQHandler(void);
 
-void play_tune(unsigned char note, uint16_t duration_ms);
+void play_tune(unsigned char note, uint16_t duration_ms, int is_melody);
 void play_melody_from_moves(MOVE* moves, uint32_t len);
 
 

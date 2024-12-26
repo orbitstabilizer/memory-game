@@ -15,6 +15,7 @@ void reset_game() {
 //	seven_segment_display(0);
 	display.turn_counter = 1; //TODO:display
 	display.button_indicator = 0;
+	display.timer = 0;
 
 //    TIM6->CR1 |= 1; // Enable timer.
 }

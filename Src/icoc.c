@@ -116,10 +116,12 @@ void TIM17_IRQHandler() {
 		_tune_player.note_duration--; // down counting for tone duration
 		if (_tune_player.note_duration < 0){ // if target duration is reached
 			if (_tune_player._is_melody && _tune_player._melody_iter+1 <_tune_player._melody_len ){
+				uint16_t duration = 80;
 				if (!_tune_player._silence){
 					_tune_player._melody_iter+=1;
 					// set output mode PWM1
 					__BFI(TIM17->CCMR1, 0b0110, 4, 4)
+					duration = (_tune_player._moves[ _tune_player._melody_iter].time + 1)*180;
 				}
 				else{
 					// set output mode Forced low
@@ -128,7 +130,7 @@ void TIM17_IRQHandler() {
 				_tune_player._silence^=1;
 				play_tune(
                     _tune_player._moves[ _tune_player._melody_iter].button %7, 
-                    (_tune_player._moves[ _tune_player._melody_iter].time + 1) * 180
+					duration, 1
                 );
 
 			}
@@ -144,7 +146,8 @@ void TIM17_IRQHandler() {
 /*
  * Plays a tune for given duration (in ms)
  */
-void play_tune(unsigned char note, uint16_t duration_ms){
+void play_tune(unsigned char note, uint16_t duration_ms, int is_melody){
+	_tune_player._is_melody = is_melody;
 
 	note %=7;
 	const static int tunes[] = {
@@ -173,7 +176,7 @@ void play_melody_from_moves(MOVE* moves, uint32_t len){
 	_tune_player._silence = 1;
 
 	_tune_player._is_melody = 1;
-	play_tune(moves->button %7, 80*( 1 + moves->time ));
+	play_tune(moves->button %7, 80*( 1 + moves->time ), 1);
 }
 
 

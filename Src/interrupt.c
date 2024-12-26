@@ -16,7 +16,7 @@ void LPUART1_IRQHandler(void) {
 		if (!move.fail && (move.button < 0 || move.button >= 7)) {
 			return;
 		}
-		if (!move.fail && (move.time < 0 || move.time >= 5)) {
+		if (!move.fail && (move.time < 0 || move.time >= 3)) {
 			return;
 		}
 
@@ -77,7 +77,7 @@ void TIM16_IRQHandler() {
 //					handle_player_turn((MOVE){0, ic.time%5, false});
 //					button_pressed = -1;
 //				}
-				play_tune(button_pressed%7, 80*( 1+(ic.time%4) ));
+				play_tune(button_pressed%7, 80*( 1+(ic.time%3) ), 0);
 			}
 //			play_tune(ic.time%7, 100);
 			ic_on_progress = 0;
