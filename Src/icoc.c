@@ -9,7 +9,27 @@
 #include "icoc.h"
 #include "move.h"
 #include "addresses.h"
+#include <string.h>
 
+MOVE saz_moves_buffer[40];
+uint32_t saz_move_len;
+MOVE* saz_moves;
+void setup_saz_mix(){
+	const static char * saz_mix = "GAAAGABCBAGFGFABAGFEFEGAGFEDE-DEFFDE\0";
+	saz_move_len = 36;
+	saz_moves = saz_moves_buffer;
+	int i = 0;
+	for (i = 0; i < saz_move_len; i++){
+		if (saz_mix[i] == '-'){
+			saz_moves_buffer[i].button = '-';
+			saz_moves_buffer[i].time = 2;
+		}
+		else{
+			saz_moves_buffer[i].button = saz_mix[i] - 'A';
+			saz_moves_buffer[i].time = 0;
+		}
+	}
+}
 
 /*
  * Setup PA6 for IC using TIM16
@@ -105,6 +125,7 @@ typedef struct {
 	uint32_t _melody_iter;
 	uint32_t _melody_len;
 	int _silence;
+	int _skip_silence;
 
 
 }_TunePlayerContext;
@@ -116,25 +137,25 @@ void TIM17_IRQHandler() {
 		_tune_player.note_duration--; // down counting for tone duration
 		if (_tune_player.note_duration < 0){ // if target duration is reached
 			if (_tune_player._is_melody && _tune_player._melody_iter+1 <_tune_player._melody_len ){
+
 				uint16_t duration = 80;
-				if (!_tune_player._silence){
-					_tune_player._melody_iter+=1;
-					// set output mode PWM1
-					__BFI(TIM17->CCMR1, 0b0110, 4, 4)
+                unsigned char note = '-';
+				if (_tune_player._skip_silence || !_tune_player._silence){
+					_tune_player._melody_iter++;
+                    note = _tune_player._moves[ _tune_player._melody_iter].button;
 					duration = (_tune_player._moves[ _tune_player._melody_iter].time + 1)*180;
 				}
-				else{
-					// set output mode Forced low
-					__BFI(TIM17->CCMR1, 0b0100, 4, 4)
-				}
+
 				_tune_player._silence^=1;
 				play_tune(
-                    _tune_player._moves[ _tune_player._melody_iter].button %7, 
+                    note,
 					duration, 1
                 );
 
 			}
 			else{
+                // clear tune player _TunePlayerContext
+//                memset(&_tune_player, 0, sizeof(_TunePlayerContext));
 				TIM17->CR1 &= ~1; // stop the timer clock ( play_tune starts it)
 			}
 		}
@@ -147,12 +168,22 @@ void TIM17_IRQHandler() {
  * Plays a tune for given duration (in ms)
  */
 void play_tune(unsigned char note, uint16_t duration_ms, int is_melody){
+    if (note == '-'){
+        // set output mode Forced low
+        __BFI(TIM17->CCMR1, 0b0100, 4, 4)
+        note = 9;
+    }
+    else{
+        // set output mode PWM1
+        __BFI(TIM17->CCMR1, 0b0110, 4, 4)
+        note %=8;
+    }
+
 	_tune_player._is_melody = is_melody;
 
-	note %=7;
 	const static int tunes[] = {
-			262, 294, 330, 349, 392, 440, 494
-		 //  C    D    E    F    G    A    B
+			262, 294, 330, 349, 392, 440, 494, 523, 100
+		 //  C    D    E    F    G    A    B   D2    -
 	};
 	int freq = tunes[note];
 
@@ -176,7 +207,12 @@ void play_melody_from_moves(MOVE* moves, uint32_t len){
 	_tune_player._silence = 1;
 
 	_tune_player._is_melody = 1;
-	play_tune(moves->button %7, 80*( 1 + moves->time ), 1);
+	play_tune(moves->button, 80*( 1 + moves->time ), 1);
 }
 
 
+
+void play_saz_mix(){
+	_tune_player._skip_silence = 1;
+    play_melody_from_moves(saz_moves, saz_move_len);
+}

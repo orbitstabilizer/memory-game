@@ -38,6 +38,8 @@ void TIM17_IRQHandler(void);
 
 void play_tune(unsigned char note, uint16_t duration_ms, int is_melody);
 void play_melody_from_moves(MOVE* moves, uint32_t len);
+void play_saz_mix();
+void setup_saz_mix();
 
 
 

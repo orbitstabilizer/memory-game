@@ -18,10 +18,15 @@ void setup() {
 	LPUART1_initialization();
 	reset_game();
 
+
 }
 
 int main(){
+	setup_saz_mix();
 	setup();
+
+
+
 	while(1){
 		__WFI;
 

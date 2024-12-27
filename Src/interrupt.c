@@ -21,7 +21,13 @@ void LPUART1_IRQHandler(void) {
 		}
 
 		handle_opponents_turn(move);
-		play_melody_from_moves(memory,turn_counter);
+		if (move.fail){
+			play_saz_mix();
+		}
+		else{
+			play_melody_from_moves(memory,turn_counter);
+		}
+
     }
 }
 
@@ -49,6 +55,7 @@ void TIM16_IRQHandler() {
 		TIM16->SR &= ~(1 << 1); // clear the interrupt
 		ic.is_rising_edge^=1; // toggle rising/falling edge flag
 		if (ic.is_rising_edge){
+
 			/*
 			 * USE ADC TO DETECT WHICH BUTTON IS PRESSED
 			 */
